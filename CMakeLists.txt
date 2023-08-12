@@ -17,7 +17,7 @@ include_directories(${GLFW_INCLUDE_DIRS})
 # set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wextra -Wpedantic -Werror -g")
 
 
-add_executable(GameOfThrive src/main.cpp)
+add_executable(GameOfThrive src/main.cpp src/graphics/renderer.cpp)
 
 # Link the libraries
 target_link_libraries(GameOfThrive ${OPENGL_LIBRARIES})
