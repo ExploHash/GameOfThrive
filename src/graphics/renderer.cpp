@@ -1,5 +1,20 @@
 #include "../../include/graphics/renderer.hpp"
 
+const char* vertexShaderSource = "#version 410 core\n"
+"layout (location = 0) in vec3 aPos;\n"
+"void main()\n"
+"{\n"
+"    gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+"}\0";
+
+const char* fragmentShaderSource = "#version 410 core\n"
+"out vec4 FragColor;\n"
+"uniform vec3 triangleColor;\n"
+"void main()\n"
+"{\n"
+"    FragColor = vec4(triangleColor, 1.0);\n"
+"}\0";
+
 void Renderer::errorCallback(int error, const char* description)
 {
   fputs(description, stderr);
@@ -71,6 +86,23 @@ void Renderer::initializeShaders() {
   // Bind VAO and VBO
   glBindVertexArray(VAO);
   glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+  // Compile vertex shader
+  vertexShader = glCreateShader(GL_VERTEX_SHADER);
+  glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
+  glCompileShader(vertexShader);
+
+  // Compile fragment shader
+  fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+  glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+  glCompileShader(fragmentShader);
+
+  // Link shaders
+  shaderProgram = glCreateProgram();
+  glAttachShader(shaderProgram, vertexShader);
+  glAttachShader(shaderProgram, fragmentShader);
+  glLinkProgram(shaderProgram);
+  glUseProgram(shaderProgram);
 }
 
 void Renderer::addRenderObject(RenderObject render_object)
